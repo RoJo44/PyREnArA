@@ -1,10 +1,10 @@
 # Welcome to PyREnArA (Python-R-Enviroment-for-Artefact-Analysis)
 
 ## Team
-- Robin John	Institute of Prehistoric Archeology, University of Cologne, Bernhard-Feilchenfeld-Str. 11, 50969 Köln, Germany.	robin_john@web.de
-- Florian Linsel	Institute of Computer Science, Martin-Luther-Universität Halle-Wittenberg, Von-Seckendorff-Platz 1, 06120 Halle, Germany.	linsel.florian@gmail.com
-- Dr. Georg Roth	Institut für Prähistorische Archäologie, Freie Universität Berlin, Fabeckstr. 23-25, 14195 Berlin, Germany	g.roth@fu-berlin.de
-- Dr. Andreas Maier	Institute of Prehistoric Archeology, University of Cologne, Bernhard-Feilchenfeld-Str. 11, 50969 Köln, Germany.	a.maier@uni-koeln.de
+- ** Robin John **	Institute of Prehistoric Archeology, University of Cologne, Bernhard-Feilchenfeld-Str. 11, 50969 Köln, Germany.	robin_john@web.de
+- ** Florian Linsel **	Institute of Computer Science, Martin-Luther-Universität Halle-Wittenberg, Von-Seckendorff-Platz 1, 06120 Halle, Germany.	linsel.florian@gmail.com
+- ** Dr. Georg Roth **	Institut für Prähistorische Archäologie, Freie Universität Berlin, Fabeckstr. 23-25, 14195 Berlin, Germany	g.roth@fu-berlin.de
+- ** Dr. Andreas Maier **	Institute of Prehistoric Archeology, University of Cologne, Bernhard-Feilchenfeld-Str. 11, 50969 Köln, Germany.	a.maier@uni-koeln.de
 
 ## About the project
 PyREnArA (Python-R-Environment for Artifact Analysis) is a code for half-automated, trait-based recording of morphological properties of (stone-)artifacts and the statistical evaluation of the recorded properties. PyREnArA, as the name says, is written both in Pathon and R. It is specialized for the analysis of paleolithic projectile points depicted in drawings or photographs. It provides traditional and new information on artifact morphology, customized for the implemented statistical methods, which allow for quantitative analyses of morphological change and to statistically determine the amount of variation that correlates with the progress of time or with the geographical position. In doing so, it provides insight into material culture evolution far beyond traditional typology. However, as completely independent analytical system, it is not intended to substitute typological research, but rather to complement it and to provide new perspectives on the archaeological record, which are otherwise invisible. The recording system, on which PyREnArA is based on, has been developed over several semesters in seminars with students from the Friedrich-Alexander-University Erlangen-Nürnberg and the University of Cologne. The coding was done by Robin John, Florian Linsel and Dr. Georg Roth.
