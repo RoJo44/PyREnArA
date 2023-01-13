@@ -1,0 +1,27 @@
+{
+    "id": "33D7D80E",
+    "path": null,
+    "project_path": null,
+    "type": "r_source",
+    "hash": "0",
+    "contents": "",
+    "dirty": true,
+    "created": 1648386888851.0,
+    "source_on_save": false,
+    "relative_order": 14,
+    "properties": {
+        "tempName": "Untitled4",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "301,16",
+        "scrollLine": "297"
+    },
+    "folds": "25|29|45|0|\n111|42|125|0|\n",
+    "lastKnownWriteTime": 2430332378944,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1648747068228,
+    "read_only": false,
+    "read_only_alternatives": []
+}

@@ -1,0 +1,329 @@
+### TITLE: ARCHAEOCOD ###
+### AUTHORS: Florian Linsel (University of Bamberg), Dr. Georg Roth (Freie Universität Berlin)###
+
+### SYSTEM INFORMATION ###
+### R version 3.6.3 (2021-08-11) ###
+### Platform: x86_64-w64-mingw32/x64 (64-bit) ###
+### Running under: Windows 10 x64 (build 18362) ###
+
+### ATTACHED BASE PACKAGES:
+### [1] stats     graphics  grDevices utils  
+### [6] methods   base
+
+rm(list = ls())
+
+#install.packages(c('Momocs','ggplot2','cowplot','cluster','data.table','stringr','tidyverse','borealis'))
+
+require(Momocs)
+require(ggplot2)
+
+require(cowplot)
+require(cluster)
+require(data.table)
+require(stringr)
+require(tidyverse)
+require(borealis)
+
+
+load_images <- function (x) {
+  
+  invisible( y <- strsplit(x, "/"))
+  
+  
+  data_name <- y[[1]][length(y[[1]])]
+  invisible(lf <- list.files(paste(x,'/', data_name,'_outlines/',sep=''), full.names=TRUE, pattern='\\jpg$'))
+  
+  invisible(
+    if (exists('lf_total') == TRUE)
+    {
+      invisible(lf_total <<- cbind(c(lf_total,lf)))#,SIMPLIFY=FALSE)
+      #outlines_exp.data <- mapply(rbind,c(outlines_exp,outlinefile),SIMPLIFY=FALSE)
+    }
+    else
+    {
+      invisible(lf_total <<- c(lf))
+      
+    }
+  )
+}
+
+GMM_filt <- function (dir,outlines.data) {
+  
+  ID <- outlines.data['ID']
+  
+  dir_list <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
+  
+  a <- lapply(dir_list,load_images)
+  
+  outlines <- invisible(import_jpg(lf_total))
+  
+  lf <- str_split(lf_total,'/')
+  lf <- transpose (lf)
+  
+  artefact <- c() 
+  folder <- c()
+  site <- c()
+  
+  for (i in lf_total){
+    
+    i_2 <-  str_split(i,'/')
+    
+    i_artefact <- i_2[[1]][length(i_2[[1]])]
+    i_folder <- i_2[[1]][length(i_2[[1]])-1]
+    i_site <- i_2[[1]][length(i_2[[1]])-2]
+    artefact <- c(artefact,substr(i_artefact,1,nchar(i_artefact)-4))
+    folder <- c(folder, substr(i_folder,1,nchar(i_folder)))
+    site <- c(site, substr(i_site,1,nchar(i_site)))
+    
+  }
+  
+  # 
+  # for (i in lf[7]){
+  #   artefact <- c(artefact,substr(i,1,nchar(i)-4))
+  #   
+  # }
+  # for (i in lf[6]){
+  #   folder <- c(folder, substr(i,1,nchar(i)))
+  # }
+  # 
+  # for (i in lf[5]){
+  #   site <- c(site, substr(i,1,nchar(i)))
+  # }
+  
+  filter_list <- as.data.frame(ID)
+  
+  artefact_filt <- artefact[artefact %in% filter_list$ID]
+  folder_filt <- folder[artefact %in% filter_list$ID]
+  site_filt <- site[artefact %in% filter_list$ID]
+  
+  # 
+  lf_total_total = c()
+  lf_total_total <- c(paste0(dir,paste(site_filt, folder_filt, artefact_filt, sep="/"),".jpg"))
+  
+  # resizing of images
+  #lapply(lf_total_total,resizePixels,512)
+  
+  # image import
+  b <- lapply(lf_total_total,load_images)
+  outlines_filt <- invisible(import_jpg(lf_total_total))
+  
+  return_list <- list("outlines_filt" = outlines_filt, "outlines.data" = outlines.data)
+  return (return_list)
+}
+
+resizePixels <- function(my_file,h_size) {
+  
+  #library(imager)
+  library(magick)
+  
+  im <- image_read(paste0(my_file,'.jpg'))
+  w_h_ratio <- width(im)/height(im)
+  print(paste0('x',h_size))
+  
+  thmb <- image_scale(im, geometry = paste0('x',h_size))#paste0('x',h_size))#resize(im,round(h_size*w_h_ratio),round(h_size))
+  
+  thres <- image_level(thmb,black_point = 10,white_point = 10,mid_point = 100,channel = NULL) #threshold(thmb,"5.7%") %>% plot(main="Determinant: 1% highest values")
+  
+  image_write(thres,(paste0(my_file,'_res.jpg')))
+}
+
+GMM <- function (dir,outlines_filt,outlines.data_filt,data_metrics) {
+  
+  ###     1. example data and packages
+  
+  outlinefile_filt <- Out(outlines_filt,fac = outlines.data_filt) ### creation of an outline file with the database supplying metadata outlines_2.data
+  
+  npal <- length (unique (outlinefile_filt$site))
+  print(npal)
+  
+  efourierfile <- efourier(outlinefile_filt, norm = FALSE)#, nb.h = 10, smooth.it = 0, norm = TRUE, start = FALSE) ### creation of EFA class (10 harmonics); normalisation is suitable in this instance given previous procedures.
+  ### calls the file detailing the created OutCoe object (data and factors)
+  
+  #efourierfile <- efourier(bot, norm = FALSE)
+  efourierfilepca <- PCA(efourierfile, fac = outlines.data_filt)
+  
+  # png(paste0(dir,"../png/R/GMM_harmonicpower.png"), width=8333, height=5156, res=1200)
+  # calibrate_harmonicpower(efourierfile)
+  # dev.off()
+
+  ## 1.1 ...
+  
+  #   vector <- c(manova.Coe(efourierfile, "type"))
+  
+  #   write.csv(vector,paste0('../../png/R/GMM_manova.csv'))
+  
+  ###     2. distance and clustering
+  
+  # a distance matrix (default euclidean distance is correct)
+  
+  distobj <- dist(efourierfilepca$x[,1:10])
+  summary(distobj)
+  
+  # just some ward hierclus
+  
+  cluswardd2 <- hclust(d = distobj, method = "ward.D2")
+  
+  print(1)
+  
+  ###     3. silhouette
+  
+  # 'cutting' the dendrogramm (the 'tree') into k clusters
+  
+  clusloesk2 <- cutree(tree = cluswardd2, k=3)
+  
+  # silhouette
+  # requires an integer vector holding cluster ids and a distance matrix
+  
+  sils <- silhouette(x = clusloesk2, dist=distobj)
+  
+  # overall performance is average silhouette width
+  
+  summary(sils)$avg.width
+  
+  ###       4. "all together now"
+  
+  # say, we build at minimum 2 and at maximum 10 groups
+  # each time we cut the tree
+  # and apply silhouette
+  
+  ##    4.1. "for k in two to some" loop
+  
+  silvec <- rep(0,9) # empty vector for result
+  
+  for (k in 2:10)
+  { clusloeskk  <- cutree(tree = cluswardd2, k=k) # using the wardd2 dendrogr
+  sils        <- silhouette(x = clusloeskk, dist=distobj)
+  silvec[k-1] <- summary(sils)$avg.width }
+  
+  (kopt <- (2:10)[which.max(silvec)]) # how many clusters are silhouette-optimal
+  
+
+  
+  koptcol <- rainbow(kopt) # over the rainbow
+  koptcol <- adjustcolor(koptcol, 0.2) # very transp cols
+  
+  clusloeskopt  <- cutree(tree = cluswardd2, k=kopt) # using the wardd2 dendrogr
+  
+
+  ##    5. Export PCA values
+  
+  
+  outlines.data_filt$clust <- clusloeskopt
+  
+  levels(outlines.data_filt$clust) <- unique (ordered(outlines.data_filt$clust))
+  
+  #################################################
+  #
+  
+  outlinefile_filt <- Out(outlines_filt,fac = outlines.data_filt) ### creation of an outline file with the database supplying metadata outlines_2.data
+  
+  png(paste0(dir,"../png/R/GMM_panel_clustcoloured.png"), width=8333, height=5156, res=1200)
+  panel(outlinefile_filt,fac='clust', names='clust', palette = col_cold)#, fac = 'widest_part')
+  dev.off()
+  
+  
+  return (efourierfilepca)
+}
+
+GMM_procedure <- function (dir,data_metrics){
+  
+  
+  outlines.data <- read.csv(paste0(dir,data_metrics,'.csv'), header = T, sep=",",encoding ="UTF-8")
+  GMM_prep_return <- GMM_filt (dir,outlines.data)
+  
+  outlines_filt <- GMM_prep_return$outlines_filt
+  outlines.data <- GMM_prep_return$outlines.data
+  
+  outlines.data$X <- NULL
+  
+  #data <- GMM (dir,outlines_filt,outlines.data,data_metrics)
+  return (outlines_filt)
+  
+}
+
+
+dir <- '../../project/'
+
+data_metrics <- 'data_metrics_exclusive_FD_filtered'
+setwd('../code/R')
+#
+outlines_filt <- GMM_procedure(dir,data_metrics)
+
+outlines.data <- read.csv(paste0(dir,data_metrics,'_clust.csv'))
+
+
+outlines.data$X <- NULL
+
+
+
+outlines.data$site <- as.factor(outlines.data$site)
+levels(outlines.data$site) <- unique (outlines.data$site)
+
+outlines.data$clust <- as.factor(outlines.data$clust)
+levels(outlines.data$clust) <- unique (outlines.data$clust)
+
+
+outlinefile_filt <- Out(outlines_filt,fac = outlines.data$site) ### creation of an outline file with the database supplying metadata outlines_2.data
+
+npal <- length (unique (outlines.data$clust))
+len_data <- length (outlines.data$clust)
+print(npal)
+
+png(paste0(dir,"../png/R/GMM_panel_clust.png"), width=8333, height=5156, res=1200)
+panel(outlinefile_filt,fac='value', each=len_data,names = TRUE,cex.names = 0.1)
+dev.off()
+
+outlinefile_filt <- Out(outlines_filt,fac = outlines.data$site) ### creation of an outline file with the database supplying metadata outlines_2.data
+
+npal <- length (unique (outlines.data$site))
+len_data <- length (outlines.data$site)
+print(npal)
+
+png(paste0(dir,"../png/R/GMM_panel_site.png"), width=8333, height=5156, res=1200)
+panel(outlinefile_filt,fac='value', each=len_data,names = TRUE,cex.names = 0.1)
+dev.off()
+
+png(paste0(dir,"../png/R/GMM_reconstruction_20.png"), width=8333, height=5156, res=1200)
+calibrate_reconstructions_efourier(outlinefile_filt, range=1:20)
+dev.off()
+
+png(paste0(dir,"../png/R/GMM_reconstruction_10.png"), width=8333, height=5156, res=1200)
+calibrate_reconstructions_efourier(outlinefile_filt, range=1:10)
+dev.off()
+
+png(paste0(dir,"../png/R/GMM_stack.png"), width=8333, height=5156, res=1200)
+stack(outlinefile_filt)
+dev.off()
+
+# 
+# png(paste0(dir,"../png/R/GMM_panel.png"), width=8333, height=5156, res=1200)
+# panel(hearts, fac="aut", names="aut")
+# dev.off()
+# data(hearts)
+# levels(hearts$aut) # thank you guys !
+# panel(hearts, cols=rep(col.summer2(8), each=30), names=TRUE)
+##########################################################
+#After RDA
+
+# data_metrics <- 'data_metrics_exclusive_FD_filtered_clust_rda'
+# setwd('../code/R')
+# filter_list <- c('ID', 'ID.1','X','X.1','Unnamed..0','class','tip_angle','position_widest_extend','reference','class_old','position_longest_extend','ka_cal_BP','typology','region','site','clust','clas')
+# 
+# outlinefile_filt <- GMM_RDA_procedure (dir,data_metrics,filter_list)
+
+################################################
+
+# files <- list.files('../../images/')
+# 
+# setwd('../../images/')
+# 
+# outlines_filt <- invisible(import_jpg(files))
+# 
+# outlinefile_filt <- Out(outlines_filt)#, fac = outlines.data) ### creation of an outline file with the database supplying metadata outlines_2.data
+# #panel(outlinefile)#, fac = 'widest_part', palette = col_cold) 
+# 
+# efourierfile <- efourier(outlinefile_filt,nb.h = 5, smooth.it = 0, norm = FALSE)#, nb.h = 10, smooth.it = 0, norm = TRUE, start = FALSE) ### creation of EFA class (10 harmonics); normalisation is suitable in this instance given previous procedures.
+# ### calls the file detailing the created OutCoe object (data and factors)
+# 
+# #efourierfile <- efourier(bot, norm = FALSE)
+# efourierfilepca <- PCA(efourierfile)

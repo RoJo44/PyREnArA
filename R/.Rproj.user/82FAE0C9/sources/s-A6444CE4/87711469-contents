@@ -1,0 +1,490 @@
+
+###     0. Referenzen
+#
+# RDA ist 'kanonische' PCA:
+# RDA verh?lt sich zu PCA, wie CCA zu CA.
+# Wie PCA erh?lt auch RDA die euklidischen Distanzen
+# der F?lle - allerdings eingeschr?nkt durch die
+# kanonische Bedingung.
+#
+# Referenzen
+#
+#  - M. Greenacre/R. Primicerio, Multivariate Analysis of Ecological Data (2013)
+#	   freies Online-Buch dort Kap. 13:
+#	   https://www.fbbva.es/wp-content/uploads/2017/05/dat/DE_2013_multivariate.pdf
+#  - P.Legendre/L.Legendre, Numerical Ecology (Amsterdam 2019)
+#    https://www.worldcat.org/title/numerical-ecology/oclc/1154702375
+#	   [ISBN:  	9780444538680]
+#  - D.Borcard/Fr.Gillet/P.Legendre, Numerical Ecology with R (Cham 2018)
+#    https://www.worldcat.org/title/numerical-ecology-with-r/oclc/1032591644
+#
+#############
+
+
+
+###     1. Daten und Pakete
+
+getwd() # Wie heisst der Arbeitsordner ?
+dir() # welche Ordner und Dateien gibt es dort?
+
+
+##    1.1. Daten
+
+# W?hle "data_metrics_merged_filtered_chrono_ergaenztGR.csv"
+
+name <- "Outline_code/01__Gravetten/data_metrics_RDA.csv"
+
+#datfram <- read.table(file.choose(), header=TRUE, sep=",", dec=".", na.strings = "NA")
+datfram <- read.table(name, header=TRUE, sep=",", dec=".", na.strings = "NA")
+
+datfram$X.1
+
+View(datfram)
+
+table(datfram$typology,datfram$clust)
+
+datfram <- datfram [datfram$clust == 2,]
+
+summary(datfram_2)
+
+
+datfram_1 <- datfram [datfram$clust == 1,]
+
+summary(datfram_1)
+
+datfram <- datfram [datfram$clust == 2,]
+
+
+table(datfram$typology,datfram$cluster)
+
+filter_list = list ('X','X.1','tip_angle','ka_cal_BP','typology','clust','class')
+
+dat <- datfram[ ,which(!(names(datfram) %in% filter_list)==TRUE)]
+table(datfram$typology,datfram$ka_cal_BP)
+table(datfram$typology,datfram$ka_cal_BP)
+
+# new dataset
+
+dat_2 <- datfram[ ,which(!(names(datfram) %in% filter_list)==TRUE)]
+
+str(dat_2)
+
+filt <- names(which(table(datfram$typology) > 10))
+
+dat_2 <- dat_2[datfram$typology %in% filt,]
+
+dat_2_1 <- datfram[datfram$typology %in% filt, c('typology', 'ka_cal_BP')]
+
+dat_2_1$typology <- factor(dat_2_1$typology)
+
+str(dat_2_1)
+
+X <- dat_2_1
+
+Y <- dat_2
+
+table(X$typology,X$ka_cal_BP)
+
+X_2 <- X
+
+levels(X_2$typology)[c(1,4:7)] <- "projectilepoints"
+
+str(X_2) 
+
+X_3 <- X_2 [X_2$typology == "projectilepoints",] # 
+
+Y_3 <- dat_2[X_2$typology == "projectilepoints",]
+
+str(Y_3)
+### projectile points merged data 
+
+
+# F?lle (Zeilen) und (numerische) Merkmale (Spalten):
+# Spalten 2 bis 18 sind die - zumeist (!) - metrischen
+# Merkmale, Spalte 19 'ka_cal_BP' enth?lt die vermutete
+# Ursache der Fall?hnlichkeiten im multivariaten Raum, das Alter.
+
+datfram$tip_angle
+
+# ACHTUNG: Spalte 16 "tip_angle" ist eine Winkelangabe und
+# sollte NICHT wie eine metrische Variable behandelte werden!
+# Dieses Merkmal wird hier daher auch weggelassen!
+#
+# Zu Winkel-Statistik siehe:
+#   Arthur Pewsey/Markus Neuh?user/Graeme D Ruxton,
+#   Circular Statistics in R (Oxford: OUP 2013).
+
+
+# Auswahl ohne Spalten 'Fundname','Winkel' und 'Datierung'
+# wird Datentabelle f?r Ordination.
+
+#dat <- datfram[, -c(1,16,19)]
+str(dat)
+
+##    1.2. Datenbereinigung
+
+# ACHTUNG, bei der Datierung ist immer noch ein K?fer im Getriebe!
+#
+# Habe die vermutlichen technisch-fehlerhaften Eintr?ge in Spalte
+# 'ka_cal_BC', die auf "Antl" lauteten durch NA ersetzt!
+
+which(is.na(datfram$ka_cal_BP))
+sum(is.na(datfram$ka_cal_BP))
+
+# Aber 100 Eintr?ge sind betroffen und werden entfernt!
+#
+# Folgende Auswahl ist also bei korrektem Datensatz nicht n?tig...
+
+str(dat[ !is.na(datfram$ka_cal_BP),])
+
+Y <- dat#[ !is.na(datfram$ka_cal_BP),]
+
+# Arbeitskopie der Daten, zu denen es eine Datierung gibt
+
+str(Y)
+
+# Ebenso Datierungsmerkmal ausw?hlen
+
+(x <- datfram$typology) #ka_cal_BP)#[ !is.na(datfram$ka_cal_BP)])
+(x_2 <- data.frame(type = factor(datfram$typology) , chrono = datfram$ka_cal_BP)) #ka_cal_BP)#[ !is.na(datfram$ka_cal_BP)])
+str(x)
+str(x_2)
+nrow(Y);length(x);nrow(Y)==length(x)
+
+# # Inventarnamen
+# 
+# (invennam <- datfram$ID[ !is.na(datfram$ka_cal_BP)])  # Auswahl ohne NA-F?lle
+# invennam <- unlist(strsplit(x = invennam, split = "_"))
+#   # Abtrennung des ersten Wortteiles und Wandlung von Liste in Vektor (unlist)
+# (invennam <- invennam[seq(1,355*3,by=3)])
+#   # Auswahl
+# 
+# unique(invennam) # welche eindeutigen gibt es.
+
+
+
+##    1.3. Erweiterungspaket
+
+#  "vegan"
+# (Steht f?r "Veg-etation An-alysis")
+# Die K?nigin der R-Pakete f?r Multivariates
+ 
+# install.packages("vegan") # auf Computer f?r R zug?nglich speichern
+# Zeile nur bei der ersten Nutzung ausf?hren.
+
+# require(vegan) # in R laden
+
+# R und vegan sind zu zitieren !
+
+citation()
+citation("vegan")
+
+
+
+###     2. RDA
+
+
+## 2.1. Berechnung
+
+res <- vegan::rda(Y~X$typology + X$ka_cal_BP, scale=TRUE) # RDA
+
+res_2 <- vegan::rda(Y~X$typology, scale=TRUE) # RDA
+
+res_3 <- vegan::rda(Y_3~ X_3$ka_cal_BP, scale=TRUE) # RDA
+
+# Argument 'scale=TRUE' sorgt daf?r, dass der
+# PCA-Schritt der RDA auf den Korrelationen beruht,
+# mit anderen Worten, dass alle Variablen ungef?hr
+# gleichgewichtet ins Ergebnis eingehen.
+#
+# Das ist bei Ihren Daten entscheidend, weil sonst
+# die Gr??en der Zahlenwerte benutzt werden, und
+# dann Merkmale wie 'area' alles dominieren w?rden!
+#
+# Und ein Merkmal wie 'position_longest_extend' spielte
+# dann gar keine Rolle mehr!
+
+lapply(Y, summary)
+
+
+## 2.2. Pr?fung der RDA
+
+# ZUALLERERST PR?FEN, OB RDA STRUKTUR ERKANNTE.
+# Wenn kein signifikanter Test, dann ist Annahme
+# der Ursache-/Wirkungs-Beziehung zu ?berdenken.
+
+vegan::anova.cca(res, alpha=0.05, beta=0.001, perm.max=9999)
+
+vegan::anova.cca(res, alpha=0.05, beta=0.001, perm.max=9999, by = 'margin')
+
+
+# res_2
+vegan::anova.cca(res_2, alpha=0.05, beta=0.001, perm.max=9999)        
+
+# res_3
+vegan::anova.cca(res_3, alpha=0.05, beta=0.001, perm.max=9999)    
+
+
+# Der p-Wert (Zeile 'Model', Spalte 'Pr(>F)' ) ist
+# einfach der Anteil der Ergebnisse aus 9999 Zufallsw?rfen
+# plus 1 beobachteten Datenstruktur, also der Anteil
+# von 10000 RDAs, die soviel Streuung mit ihrer
+# Ursachenvariablen erkl?ren k?nnen.
+#
+# Das Ergebnis der hier verwendeten Daten (ohne ! die Antl-besch?digten)
+# ist hochsignifikant !!!
+#
+# F?r Praktiker: steht rechts an der Tabelle mindestens
+# ein Sternchen heisst das p kleiner/gleich 0.05.
+# Hier stehen drei Sternchen = besser geht's net :-)
+
+
+(Anteilerklaert <- vegan::RsquareAdj(res)[[2]])
+
+
+# res_2
+
+(Anteilerklaert <- vegan::RsquareAdj(res_2)[[2]])
+
+# res_3
+
+(Anteilerklaert <- vegan::RsquareAdj(res_3)[[2]])
+
+
+# Allerdings werden nur 2,3 % der Streuung erkl?rt.
+#
+# Das bedeutet: ja, es gibt zeitspezifisch Ver?nderungen in den
+# hier betrachteten Merkmalen, aber diese sind sehr gering!
+
+summary(res)$cont # Anteile der Streuung pro Achse
+
+# res_3 filtered data from projetile points
+
+summary(res_3)$cont
+
+# Der Anteil (Zeile 'proportion explained', Spalte 'RDA1')
+# der RDA-Achse an der Gesamtstreuung ist die noch 'rohe'
+# Information dar?ber, welchen Anteil an Streuung die
+# Variable 'ursache' erkl?ren kann.
+# Beachte: der Wert f?r R-Quadrat wird aus diesem Anteilswert
+# durch eine leichte Umrechnung erzeugt und dabei immer etwas
+# kleiner.
+
+summary(res)$cont$importance[2,1] # Das ist "Proportion Explained" in Spalte "RDA1"
+Anteilerklaert
+
+
+##    2.3. Darstellung
+
+# 2.3.1. Eigenwertdiagramm (screeplot)
+
+# Eigenwertdiagramm kommt IMMER zuerst (auch bei CA, PCA etc.)
+
+(eigvalperc <- summary(res)$cont$importance[2,])
+# Vektor der Streuungsanteile pro Achse
+
+(ymax <- round(100*max(eigvalperc)+5,0))
+# Wie hoch soll das S?ulendiagramm werden ?
+
+barplot(100*eigvalperc, las=2, names.arg=names(eigvalperc), cex.names=.7,
+  space=0, width=1, ylim=c(0,ymax ),
+  main="Eigenwertdiagramm",
+  ylab="Prozent erkl?rter Streuung pro Achse")
+
+
+# 2.3.2. Triplot quick and dirty
+
+# Triplot-Deutung
+# - F?lle nah bei einander sind ?hnlich;
+#   F?lle in Richtung einer Merkmalspfeilspitze haben
+#   bei diesem Merkmal ?berdurchschnittlich hohe Werte;
+#   F?lle beim Achsenursprung haben durchschnittliche Werte
+#   F?lle auf MMpfeil entgegenges. Seite haben unter-
+#   durchschnittliche Werte.
+# - Merkmalspfeile, die in ungef?hr gleiche Richtung
+#   zeigen, nehmen ?berwiegend gemeinsam zu und ab;
+#   Merkmalspfeile, die in ungef?hr gleiche Richtung
+#   zeigen wie Ursachenvariable, nehmen mit dieser
+#   gemeinsam zu und ab.
+#   Merkmalspfeile, die in ungef?hr rechtinklig zur
+#   Ursachenvariable liegen, haben zu dieser keine
+#   Beziehung.
+
+
+
+# QUICK and DIRTY
+
+plot(res, scaling=1, display=c("sp","wa","bp"), las=1)
+text(res, scaling=1, display="sp", las=1)
+text(res, scaling=1, display="bp", las=1)
+
+#
+
+# 2.3.3. Triplot mit umfangreichen Details
+
+#	Koordinaten
+
+k <- length(eigvalperc)	# Achsenanzahl
+
+# Fall-Koordinaten  (Positionen der Fallpunkte)
+
+fallkoo <- 	scores(	res, choices = c(1:k), display = c("sp","wa","bp"),
+                 scaling = 1, 1)$sites
+
+# Merkmals-Koordinaten (Positionen der Merkmals-Pfeilspitzen)
+
+mmalkoo <- 	scores(	res, choices = c(1:k), display = c("sp","wa","bp"),
+                 scaling = 1, 1)$species
+
+# Ursachen-Koordinaten (Positionen der Pfeilspitzen)
+
+kk <- length(res$CCA$eig)	# Anzahl kanonischer Achsen, hier 1
+
+(covar <- scores(	res, choices = c(1:k), display = c("sp","wa","bp"),
+                  scaling = "sites", 1)$biplot)
+
+
+#	Richtig anspruchsvoller Triplot
+
+# Diagrammgrenze
+
+(lim <- 0.5)
+
+(lim <- c(-1*lim,lim))
+
+# Leeres Diagramm
+
+plot(mmalkoo, type="n", asp=1, xlim=lim, ylim=lim, las=1, xlab="", ylab="")
+
+# ein Gitter
+
+abline(v=0, lty=3, col=gray(.7))
+abline(h=0, lty=3, col=gray(.7))
+
+# F?lle
+
+rcol <- rgb(.8,.8,.8,.3)	# ein transparentes helles Grau
+rbcol<- gray(.2)				# ein dunkles Grau
+
+points(fallkoo[,1:2], pch=21, bg=rcol, col=rbcol, cex=0.6)	# row points
+
+# Merkmale
+
+cbcol<- gray(.2)				#
+
+arrows(0,0,mmalkoo[,1],mmalkoo[,2], lwd=1, length=.05, angle=15, col=cbcol)
+
+tcol <- rgb(.2,.2,.2,.6)	# Textfarbe
+text(mmalkoo, rownames(mmalkoo), pos=3, cex=.8, font=3, col=tcol)	# annotation for cols
+
+# Ursachenvariable
+
+arrows(0,0,covar[,1],covar[,2], lwd=3, length=.1, angle=15, col=cbcol)
+text( covar[,1]*1.05, covar[,2]*1.05, "ka cal BP", pos=4, cex=1.2, font=4)
+
+# Beschriftungen
+
+proz   <- round(100*eigvalperc[1:2],1)
+subtextri <- paste("Triplot zeigt", sum(proz), "% der gesamten Varianz")
+
+title(main="Triplot der RDA (kanonisch ist Ursache)", cex.axis=.8,
+      xlab="RDA I", ylab="PCA I", sub=subtextri, cex.sub=.8)
+
+
+
+#	Variante mit Funden eingef?rbt nach Herkunft
+
+# Diagrammgrenze
+
+(lim <- 0.11)
+(lim <- c(-1*lim,lim))
+
+# Leeres Diagramm
+
+plot(0,0, type="n", asp=1, xlim=lim, ylim=lim, las=1, xlab="", ylab="")
+
+# ein Gitter
+
+abline(v=0, lty=3, col=gray(.7))
+abline(h=0, lty=3, col=gray(.7))
+
+# F?lle
+
+(tk <- nlevels(as.factor(x))) # 13 Zeitstufen
+xfac <- as.factor(x) # Zeitstufen als Nominalmerkmal
+
+points(fallkoo[,1:2], pch=21, bg=rainbow(13)[xfac], col=rbcol, cex=0.7)	# row points
+
+# Legende
+
+legend("right", pch=rep(21,13), pt.bg=rainbow(13), unique(invennam ))
+
+title(main="RDA: Streudiagramm der F?lle", cex.axis=.8,
+      xlab="RDA I", ylab="PCA I")
+
+
+
+
+#####################################
+#
+# Deutung:
+#
+# Nach rechts werden die Funde ?lter.
+# Merkmale, deren Pfeile nach rechts zeigen, haben h?here Werte
+# bei ?lteren St?cken, solche die nach links zeigen h?here Werte
+# bei j?ngeren St?cken.
+
+
+
+# 2.3.4. Jeweils pro Merkmal von Ursache erkl?rte Streuung
+
+(inrexp <- inertcomp(object = res, display = "species", proportional = TRUE))
+
+
+yvlim <- 10
+
+ranks <- order(inrexp[,1]) # Vektor der Gr??en-Reihenfolge der Anteile
+
+# Zul?ssige Druckgrenzen ?ndern
+
+oldpar <- par() # Grundeinstellungen hinterlegen
+par(mar = c(8,4,4,1)) # Grenzen ?ndern
+
+# Diagramm
+
+barplot(100*inrexp[ranks,1], names.arg=rownames(inrexp)[ranks], las=2,
+        cex.names=.7, space=0, width=1, ylim=c(0,yvlim))
+
+title(main="Kanonisch erkl?rte Varianz des jeweiligen Merkmals",
+      ylab="Prozent erkl?rter Streuung bei Merkmal")
+
+
+# Diagramm erweitert
+
+# Jetzt wird mit nega- oder positivem Wert angezeigt,
+# ob Merkmalswerte mit Alter ab- oder zunehmen.
+
+(negpos <- ifelse(mmalkoo[,1]<0, -1,1))
+
+# logische Frage, ob Zahlen negativ; bei ja '-1', bei nein '+1'
+
+ranks2 <- order(negpos*inrexp[,1]) # Vektor der Gr??en-Reihenfolge der Anteile
+
+barplot((negpos*100*inrexp[,1])[ranks2], names.arg=rownames(inrexp)[ranks2], las=2,
+        cex.names=.7, space=0, width=1, ylim=c(-yvlim,yvlim))
+
+title(main="Kanonisch erkl?rte Varianz des jeweiligen Merkmals",
+      ylab="Abnahme  -- Prozent erkl?rter Streuung -- Zunahme")
+
+
+
+#####################################
+#
+# Deutung:
+#
+# Welcher Anteil der Streuung eines Merkmals ist alleine anhand
+# des Kausalmerkmals sch?tzbar (hier ausgedr?ckt in Prozent)
+# und nehmen die Merkmalswerte mit dem Alter zu (positiv/oberhalb
+# Nulllinie) oder ab (unterhalb).
+
+

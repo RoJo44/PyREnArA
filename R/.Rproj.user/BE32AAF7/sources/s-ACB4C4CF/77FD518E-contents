@@ -1,0 +1,12 @@
+dir <- '../../project/'
+
+name <- 'data_metrics_exclusive_FD_filtered_clust'
+
+datfram <- read.csv(paste0(dir,name,'.csv'), header = T, sep=",",encoding ="UTF-8",stringsAsFactors=FALSE)
+
+table (datfram[datfram$clust == 1,]$site)
+table (datfram[datfram$clust == 2,]$site)
+
+table (datfram[datfram$clust == 1,]$typology)
+table (datfram[datfram$clust == 2,]$typology)
+

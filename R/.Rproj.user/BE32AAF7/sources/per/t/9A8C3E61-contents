@@ -1,0 +1,139 @@
+##Hereinladen der Datenbank
+
+path <- '/Users/Niklas/Desktop/Uni_Bamberg/WiSe_21:22/Ü_R/Referat/information.csv'
+read.csv('/Users/Niklas/Desktop/Uni_Bamberg/WiSe_21:22/Ü_R/Referat/information.csv', sep = ",")
+Biface_Database <- read.csv(path, sep = ",")
+View(Biface_Database)
+
+##Einarbeitung in Datenbank
+
+table(Biface_Database$Raw.material.type)
+table(Biface_Database$Biface.condition)
+
+
+
+Eroded <- Biface_Database [Biface_Database$Biface.condition %in% "ERODED",]
+
+Abraded <- Biface_Database [Biface_Database$Biface.condition %in% "ABRADED",]
+
+Lightly_Abraded <- Biface_Database [Biface_Database$Biface.condition %in% "LIGHTLY ABRADED",]
+
+Fresh <- Biface_Database [Biface_Database$Biface.condition %in% "FRESH",]
+
+
+materials <- c("NEPHELINITE", "CHERT", "BASALT", "ANDESITE", "TRACHYANDESITE", "FLINT", "CHALCEDONY", "QUARTZITE", "QUARTZ")
+
+Eroded_filtered <- Eroded [Eroded$Raw.material.type %in% materials,]
+
+Abraded_filtered <- Abraded [Abraded$Raw.material.type %in% materials,]
+
+Lightly_abraded_filtered <- Lightly_Abraded [Lightly_Abraded$Raw.material.type %in% materials,]
+
+Fresh_filtered <- Fresh [Fresh$Raw.material.type %in% materials,]
+
+
+Material_eroded <- table(Eroded_filtered$Raw.material.type)
+
+Material_abraded <- table(Abraded_filtered$Raw.material.type)
+
+Material_lightly_abraded <- table(Lightly_abraded_filtered$Raw.material.type)
+
+Material_fresh <- table(Fresh_filtered$Raw.material.type)
+
+#cbind für neuen df funktioniert hier nicht. 
+
+path <- '/Users/Niklas/Desktop/Uni_Bamberg/WiSe_21:22/Ü_R/Referat/Datenmatrix.csv'
+read.csv('/Users/Niklas/Desktop/Uni_Bamberg/WiSe_21:22/Ü_R/Referat/Datenmatrix.csv', sep = ";")
+Datenmatrix <- read.csv(path, sep = ";")
+View(Datenmatrix)
+
+##Shapiro-Wilk für NV
+#H0: Normalverteilung
+#H1: nicht normal verteilt (wird angenommen wenn p-value < 0,05)
+
+
+shapiro.test(Datenmatrix$ERODED)
+
+#--> nicht normalverteilt
+
+shapiro.test(Datenmatrix$ABRADED)
+
+#-->nicht normalverteilt
+
+shapiro.test(Datenmatrix$LIGHTLY.ABRADED)
+
+#--> nicht normalverteilt
+
+shapiro.test(Datenmatrix$FRESH)
+
+#--> nicht normalverteilt
+
+n_eroded <- sum(Datenmatrix$ERODED)
+
+n_abraded <- sum(Datenmatrix$ABRADED)
+
+n_lightly_abraded <- sum(Datenmatrix$LIGHTLY.ABRADED)
+
+n_fresh <- sum(Datenmatrix$FRESH)
+
+rel_Material_eroded <- (Datenmatrix$ERODED/n_eroded)
+
+rel_Material_abraded <- (Datenmatrix$ABRADED/n_abraded)
+
+rel_Material_lightly_abraded <- (Datenmatrix$LIGHTLY.ABRADED/n_lightly_abraded)
+
+rel_Material_fresh <- (Datenmatrix$FRESH/n_fresh)
+
+Datenmatrix_2 <- data.frame(cbind(rel_Material_eroded,rel_Material_abraded,rel_Material_lightly_abraded,rel_Material_fresh))
+
+View(Datenmatrix_2)
+
+
+##Test ob die Werte einer GG entstammen mit dem U-Test
+
+#H0: gleiche Verteilung 
+#H1: signifikant abweichende Verteilung (wird angenommen wenn p-value < 0,05)
+
+wilcox.test(Datenmatrix_2$rel_Material_eroded, Datenmatrix_2$rel_Material_abraded, alternative = "two.sided", paired = TRUE, exact = FALSE)
+
+wilcox.test(Datenmatrix_2$rel_Material_eroded, Datenmatrix_2$rel_Material_lightly_abraded, alternative = "two.sided", paired = TRUE, exact = FALSE)
+
+wilcox.test(Datenmatrix_2$rel_Material_eroded, Datenmatrix_2$rel_Material_fresh, alternative = "two.sided", paired = TRUE, exact = FALSE)
+
+wilcox.test(Datenmatrix_2$rel_Material_abraded, Datenmatrix_2$rel_Material_lightly_abraded, alternative = "two.sided", paired = TRUE, exact = FALSE)
+
+wilcox.test(Datenmatrix_2$rel_Material_abraded, Datenmatrix_2$rel_Material_fresh, alternative = "two.sided", paired = TRUE, exact = FALSE)
+
+wilcox.test(Datenmatrix_2$rel_Material_lightly_abraded, Datenmatrix_2$rel_Material_fresh, alternative = "two.sided", paired = TRUE, exact = FALSE)
+
+
+##Test ob die Werte einer GG entstammen mit dem Chisq-Test
+
+#H0: gleiche Verteilung 
+#H1: signifikant abweichende Verteilung (wird angenommen wenn p-value < 0,05)
+
+
+chisq.test(Datenmatrix_2$rel_Material_eroded, Datenmatrix_2$rel_Material_abraded)
+
+chisq.test(Datenmatrix_2$rel_Material_eroded, Datenmatrix_2$rel_Material_lightly_abraded)
+
+chisq.test(Datenmatrix_2$rel_Material_eroded, Datenmatrix_2$rel_Material_fresh)
+
+chisq.test(Datenmatrix_2$rel_Material_abraded, Datenmatrix_2$rel_Material_lightly_abraded)
+
+chisq.test(Datenmatrix_2$rel_Material_abraded, Datenmatrix_2$rel_Material_fresh)
+
+chisq.test(Datenmatrix_2$rel_Material_lightly_abraded, Datenmatrix_2$rel_Material_fresh)
+
+
+
+citation("tidyverse")
+
+citation()
+
+
+
+
+
+
+

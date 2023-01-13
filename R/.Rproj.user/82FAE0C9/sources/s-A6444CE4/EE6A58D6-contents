@@ -1,0 +1,50 @@
+
+
+
+
+load_images <- function (x) {
+  
+  invisible( y <- strsplit(x, "/")) # split directories to select aspects later on
+  
+  invisible(lf <- list.files(paste(x,'/', y[[1]][4],'_outlines/',sep=''), full.names=TRUE, pattern='\\jpg$')) # find all jpgs in directory
+  
+  invisible(
+    if (exists('lf_total') == TRUE) 
+    {
+      invisible(lf_total <<- cbind(c(lf_total,lf))) # attach all jpg directories to existing lf total
+      
+    }
+    else
+    {
+      invisible(lf_total <<- c(lf)) # create lf_total and attach all jpg directories to it 
+      
+    }
+  )
+}
+
+
+#####preparation for FD:
+
+
+image_to_df <- function (png_path) { # in this function an imported image gets transflated to a data frame
+  
+  i = load.image(png_path)
+  data = as.data.frame(i)
+  data = data[,0:3] # cropping to the first three columns due to the limitation of the fractal analysis
+  
+  data = as.data.frame(lapply(data, as.numeric)) # translate 
+  
+  return (data)
+  
+}
+
+
+add_site <- function (data){
+  
+  site <- do.call(rbind.data.frame,strsplit(data$ID,'_'))
+  
+  names(site) <- c('site')
+  
+  return (cbind(data, site[1]))
+  
+}

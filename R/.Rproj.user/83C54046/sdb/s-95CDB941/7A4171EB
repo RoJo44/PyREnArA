@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "dir <- '../../project/'\n\nname <- 'data_metrics_exclusive_FD_filtered_clust'\n\ndatfram <- read.csv(paste0(dir,name,'.csv'), header = T, sep=\",\",encoding =\"UTF-8\",stringsAsFactors=FALSE)\n\ntable (datfram[datfram$clust == 1,]$site)\ntable (datfram[datfram$clust == 2,]$site)\n\ntable (datfram[datfram$clust == 1,]$typology)\ntable (datfram[datfram$clust == 2,]$typology)\n\n",
+    "created" : 1660149720768.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1077116360",
+    "id" : "7A4171EB",
+    "lastKnownWriteTime" : 1649329543,
+    "last_content_update" : 1649329543,
+    "path" : "~/Documents/Projekt/ArchaeoCod_Linsel/code/R/GMM_cluster-separation_Maier-Interpretation.R",
+    "project_path" : "GMM_cluster-separation_Maier-Interpretation.R",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
