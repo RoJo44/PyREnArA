@@ -31,7 +31,7 @@ The standard-oriented images are given as output-files with lateral bars for eac
 PyREnArA requires Python and R. We used Python 3.9 and R 4.11. In order to run functions in Python and R, we recommend using Anaconda and Jupyter Notebook. PyREnArA makes use of the rpy2-library, that allows for a combination of both programming languages. It is highly recommended to install all software in the default directory and settings.
 Required packages and librarys in Python... For are we applyed a required function, that installs uninstalled packages. 
 
-## Running PyREnAra
+## Running PyREnArA
 PyREnArA consists of two files where R and Python Scripts are stored separately. Within the Python file a __main__.py script is provided. There, the user has to insert the folder directory that stores the images and the directory to R. 
 We recommend using .png or .tif format for the images. 
 The naming of the images should be strictly following the scheme “sitenamePosition_Layer” (e.g. AggsbachB_04) as the code develops the naming of the folder directory and data from the image name. Do not use spaces within the naming. The data from artefacts with identical site name and layers will later be merged together. 
