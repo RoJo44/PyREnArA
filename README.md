@@ -42,16 +42,16 @@ The default set of metrical data, that is used in the statistical functions can 
 ## Literature
 - Bonhomme, V., Picq, S., Gaucherel, C. & Claude, J. (2014). Momocs: Outline analysis using R. Journal of Statistical Software, 56, 1–24.
 - Cardini, A. & Polly, P.D. (2020). Cross-validated Between Group PCA Scatterplots: A Solution to Spurious Group Separation? Evolutionary Biology, 47, 85–95. https://doi.org/10.1007/s11692-020-09494-x 
-- Claude, J. (2008). Rfunctions1 (R functions for geometric morphometrics). In: Claude, J. 2008 Morphometrics with R. DOI: 10.13140/RG.2.2.24525.36324 
+- Claude, J. (2008). Rfunctions1 (R functions for geometric morphometrics). In: Claude, J. 2008 Morphometrics with R. https://doi.org/10.13140/RG.2.2.24525.36324 
 - Legendre, P., & Legendre, L. (2012). Numerical ecology. 3rd edition. Elsevier.
 - Leplongeon, A., Ménard, C., Bonhomme, V. & Bortolini, E. (2020). Backed Pieces and Their Variability in the Later Stone Age of the Horn of Africa. African Archaeolgical Review, 37, 437–468. https://doi.org/10.1007/s10437-020-09401-x
 - Matzig, D.N., Hussain, S.T. & Riede, F. (2021). Design Space Constraints and the Cultural Taxonomy of European Final Palaeolithic Large Tanged Points: A Comparison of Typological, Landmark-Based and Whole-Outline Geometric Morphometric Approaches. Journal of Paleolithic Archaeology, 4: 27. https://doi.org/10.1007/s41982-021-00097-2 
 - McKinney, W. (2010). Data structures for statistical computing in python. Proceedings of the 9th Python in Science Conference, 51–56.
-- Murtagh, F. & Legendre, P. (2014). Ward's hierarchical agglomerative clustering method: which algorithms implement Ward's criterion? Journal of Classification, 31, 274–295. doi:10.1007/s00357-014-9161-z.
+- Murtagh, F. & Legendre, P. (2014). Ward's hierarchical agglomerative clustering method: which algorithms implement Ward's criterion? Journal of Classification, 31, 274–295. https://doi.org/10.1007/s00357-014-9161-z
 - R Core Team (2022). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL https://www.R-project.org/ 
-- Roth, G. (2022). Überflüssige Information? Zum Verständnis moderner Deutung archäologischer Zusammensetzungsdaten mit transformationsbasierter Redundanzanalyse (tb-RDA). In E. Kaiser, M. Meyer, S. Scharl & St. Suhrbier (Eds.), Wissensschichten. Festschrift für Wolfram Schier zu seinem 65. Geburtstag. Studia honoraria 41 (pp. 28–42). VML
+- Roth, G. (2022). Überflüssige Information? Zum Verständnis moderner Deutung archäologischer Zusammensetzungsdaten mit transformationsbasierter Redundanzanalyse (tb-RDA). In E. Kaiser, M. Meyer, S. Scharl & St. Suhrbier (Eds.), Wissensschichten. Festschrift für Wolfram Schier zu seinem 65. Geburtstag. Studia honoraria 41 (pp. 28–42).
 - Schmidt, S. C., Martini, S., Staniuk, R., Quatrelivre, C., Hinz, M., Nakoinz, O., Bilger, M., Roth, G., Laabs, J., & Plath, R. V. (2022). Tutorial on Classification in Archaeology: Distance Matrices, Clustering Methods and Validation. Zenodo. https://doi.org/10.5281/zenodo.6325372 
-- Seidel, D. (2018). A holistic approach to determine tree structural complexity based on laser scanning data and fractal analysis. Ecology and Evolution, 8, 128–134. https://doi.org/10.1002/ece3.3661.
+- Seidel, D. (2018). A holistic approach to determine tree structural complexity based on laser scanning data and fractal analysis. Ecology and Evolution, 8, 128–134. https://doi.org/10.1002/ece3.3661
 - Thioulouse J, Dray S, Dufour A, Siberchicot A, Jombart T, Pavoine S (2018). Multivariate Analysis of Ecological Data with ade4. Springer. https://doi.org/10.1007/978-1-4939-8850-1
 - Viengkham, C., Isherwood, Z. & Spehar, B. (2019). Fractal-Scaling Properties as Aesthetic Primitives in Vision and Touch. Axiomathes, 2019. https://doi.org/10.1007/s10516-019-09444-z
 
