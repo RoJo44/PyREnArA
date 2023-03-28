@@ -34,7 +34,7 @@ Required packages and librarys in Python... For are we applyed a required functi
 ## Running PyREnArA
 PyREnArA consists of two files where R and Python Scripts are stored separately. Within the Python file a __main__.py script is provided. There, the user has to insert the folder directory that stores the images and the directory to R. 
 We recommend using .png or .tif format for the images. 
-The naming of the images should be strictly following the scheme “sitenamePosition_Layer” (e.g. AggsbachB_04) as the code develops the naming of the folder directory and data from the image name. Do not use spaces within the naming. The data from artefacts with identical site name and layers will later be merged together. 
+The naming of the images should be strictly following the scheme “sitenamePosition-Layer_number” (e.g. AggsbachB-3_04) as the code develops the naming of the folder directory and data from the image name. Do not use spaces within the naming. The data from artefacts with identical site name and layers will later be merged together. 
 When Paint is used to create the reference object or to color for retouch analysis, the image needs to be saved again by an other program (e.g. Adobe Photoshop).
 As mentioned before, the code creates a folder directory for every image, where all output is stored in. It also creates folders for the results of the statistical functions, that are by default named “R_statistics” and “Python_statistics”. The names of the statistical folders can be customized easily. 
 The default set of metrical data, that is used in the statistical functions can be customized by changing the “feature” argument of the functions, which is a list of strings ([‘…’, ’…’]).
