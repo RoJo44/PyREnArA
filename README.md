@@ -52,5 +52,6 @@ The default set of metrical data, that is used in the statistical functions can 
 - Roth, G. (2022). Überflüssige Information? Zum Verständnis moderner Deutung archäologischer Zusammensetzungsdaten mit transformationsbasierter Redundanzanalyse (tb-RDA). In E. Kaiser, M. Meyer, S. Scharl & St. Suhrbier (Eds.), Wissensschichten. Festschrift für Wolfram Schier zu seinem 65. Geburtstag. Studia honoraria 41 (pp. 28–42). VML
 - Schmidt, S. C., Martini, S., Staniuk, R., Quatrelivre, C., Hinz, M., Nakoinz, O., Bilger, M., Roth, G., Laabs, J., & Plath, R. V. (2022). Tutorial on Classification in Archaeology: Distance Matrices, Clustering Methods and Validation. Zenodo. https://doi.org/10.5281/zenodo.6325372 
 - Seidel, D. (2018). A holistic approach to determine tree structural complexity based on laser scanning data and fractal analysis. Ecology and Evolution, 8, 128–134. https://doi.org/10.1002/ece3.3661.
+- Thioulouse J, Dray S, Dufour A, Siberchicot A, Jombart T, Pavoine S (2018). Multivariate Analysis of Ecological Data with ade4. Springer. https://doi.org/10.1007/978-1-4939-8850-1
 - Viengkham, C., Isherwood, Z. & Spehar, B. (2019). Fractal-Scaling Properties as Aesthetic Primitives in Vision and Touch. Axiomathes, 2019. https://doi.org/10.1007/s10516-019-09444-z
 
