@@ -14,8 +14,8 @@ PyREnArA (Python-R-Environment for Artifact Analysis) is a code for half-automat
 The user needs to prepare the image(s) to be analyzed by adding a black filled rectangle with edge length of one by one centimeter obtained from the original scale as reference object and by removing objects that should not be analyzed.
 ### Code intern image preparation
 Artifact drawings and photos are automatically scanned and oriented according to a standard protocol to minimize measurement errors
-### Acquisition of metrical data
-Traditional as well as new traits of object morphology and size, such as dimensions, the geometric center, the outline to area ratio, angles, symmetry, the position of the longest extension (e.g., longitudinal or transversal), are obtained automatically. While most recorded traits are geometric and metric properties of the objects, PyREnAra also computes the fractal dimension (FD; Seidel, 2018) of the artifact outline using the box-counting method. Those obtained properties are saved within automatically created folders as images and .csv-datafiles.
+### Metrical data
+Traditional as well as new traits of object morphology and size, such as dimensions, the geometric center, the outline to area ratio, angles, symmetry, the position of the longest extension (e.g., longitudinal or transversal), are obtained automatically. While most recorded traits are geometric and metric properties of the objects, PyREnArA also computes the fractal dimension (FD; Seidel, 2018) of the artifact outline using the box-counting method. Those obtained properties are saved within automatically created folders as images and .csv-datafiles.
 ### Data merging
 All data is merged into one .csv-datafile. If the users wants so, the metrical data can be merged with a .csv-datafile provided by the user himself, which contains metadata like chronological information or geographical position. Those -csv-datafiles can be used within the build in statistical functions of PyREnArA.
 ### Geometric Morphometrics
