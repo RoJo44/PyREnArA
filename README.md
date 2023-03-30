@@ -9,6 +9,9 @@
 ## About the project
 PyREnArA (Python-R-Environment for Artifact Analysis) is a code for half-automated, trait-based recording of morphological properties of (stone-)artifacts and the statistical evaluation of the recorded properties. PyREnArA, as the name says, is written both in Python and R. It is specialized for the analysis of paleolithic projectile points depicted in drawings or photographs. It provides traditional and new information on artifact morphology, customized for the implemented statistical methods, which allow for quantitative analyses of morphological change and to statistically determine the amount of variation that correlates with the progress of time or with the geographical position. In doing so, it provides insight into material culture evolution far beyond traditional typology. However, as completely independent analytical system, it is not intended to substitute typological research, but rather to complement it and to provide new perspectives on the archaeological record, which are otherwise invisible. The recording system, on which PyREnArA is based on, has been developed over several semesters in seminars with students from the Friedrich-Alexander-University Erlangen-Nürnberg and the University of Cologne. The coding was done by Robin John, Florian Linsel and Dr. Georg Roth.
 
+## Publication
+PyREnArA is published at zenodo (https://doi.org/10.5281/zenodo.7778071).
+
 ## Worflow
 ### Image Preparation
 The user needs to prepare the image(s) to be analyzed by adding a black filled rectangle with edge length of one by one centimeter obtained from the original scale as reference object and by removing objects that should not be analyzed.
